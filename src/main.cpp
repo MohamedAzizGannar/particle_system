@@ -1,3 +1,4 @@
+#include "Emitter.h"
 #include "Particle.h"
 #include "PhysicsSystem.h"
 #include <SDL2/SDL.h>
@@ -5,14 +6,12 @@
 #include <SDL_keycode.h>
 #include <SDL_pixels.h>
 #include <SDL_render.h>
+#include <SDL_stdinc.h>
 #include <SDL_timer.h>
 #include <SDL_video.h>
 #include <iostream>
 #include <ostream>
 #include <vector>
-const SDL_Color BLUE = {0, 0, 255, 255};
-const SDL_Color RED = {255, 0, 0, 255};
-const SDL_Color GREEN = {0, 255, 0, 255};
 
 int main() {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -37,13 +36,16 @@ int main() {
   bool isRunning = true;
   SDL_Event event;
   std::vector<Particle> particles;
-  particles.push_back(Particle(250, 250, 10, 0, 1, BLUE));
-  particles.push_back(Particle(350, 350, -40, 0, 1, RED));
-
   PhysicsSystem physics_system(particles, 0.016f);
+  Emitter emitter(particles, particles.size(), 0.4f);
+  Uint32 lastTime = SDL_GetTicks();
   while (isRunning) {
+    Uint32 currentTime = SDL_GetTicks();
+    float dt = (currentTime - lastTime) / 1000.f;
+    lastTime = currentTime;
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) {
+
         isRunning = false;
       }
       if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
@@ -52,8 +54,9 @@ int main() {
     }
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-
-    physics_system.update();
+    emitter.emitParticles(dt);
+    physics_system.update(dt);
+    std::cout << "Particle Count : " << particles.size() << std::endl;
     for (const auto &particle : particles) {
       SDL_Color color = particle.getColor();
 

@@ -1,6 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
+#include <SDL2/SDL.h>
 #include <cmath>
+const SDL_Color BLUE = {0, 0, 255, 255};
+const SDL_Color RED = {255, 0, 0, 255};
+const SDL_Color GREEN = {0, 255, 0, 255};
 struct float2 {
   float x, y;
   float2() : x(0), y(0) {}
@@ -25,4 +29,14 @@ struct float2 {
   float length() const { return sqrtf(x * x + y * y); }
   float sqrd_length() const { return x * x + y * y; }
 };
+
+struct BoundingBox {
+  float2 pos;
+  float length;
+  float height;
+  BoundingBox(float2 pos_, float l, float h)
+      : pos(pos_), length(l), height(h) {}
+  BoundingBox() : pos(float2(0, 0)), length(100.f), height(100.f) {}
+};
+
 #endif
