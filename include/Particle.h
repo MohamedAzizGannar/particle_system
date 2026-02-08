@@ -12,8 +12,8 @@ private:
   float2 vel;
   SDL_Color color;
 
-  float lifetime = 9.f;
-  float age;
+  float lifetime = .5f;
+  float age = 0.f;
 
 public:
   Particle(float x, float y, float vx, float vy,

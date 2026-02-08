@@ -1,19 +1,24 @@
 #include "../include/PhysicsSystem.h"
+#include <algorithm>
+#include <iostream>
 #include <vector>
 
 PhysicsSystem::PhysicsSystem(std::vector<Particle> &particles, float time_step)
     : particles(particles), time_step(time_step) {}
 std::vector<Particle> *PhysicsSystem::getParticles() { return &particles; }
 void PhysicsSystem::update(float dt) {
+  for (auto &particle : particles) {
+    particle.setAge(particle.getAge() + dt);
+    std::cout << "Ages : " << particle.getAge() << std::endl;
+  }
+  checkLifetime();
   applyGravity(dt);
   applyDrag(dt);
   checkCollisions();
-  checkLifetime();
   for (int i = 0; i < particles.size(); i++) {
     float nx = particles[i].getPos().x + particles[i].getVel().x * dt;
     float ny = particles[i].getPos().y + particles[i].getVel().y * dt;
     particles[i].setPosition(nx, ny);
-    particles[i].setAge(particles[i].getAge() + dt);
   }
 }
 void PhysicsSystem::applyGravity(float dt) {

@@ -5,6 +5,9 @@
 const SDL_Color BLUE = {0, 0, 255, 255};
 const SDL_Color RED = {255, 0, 0, 255};
 const SDL_Color GREEN = {0, 255, 0, 255};
+const SDL_Color TEAL = {0, 125, 125, 255};
+const SDL_Color PURPLE = {125, 0, 125, 255};
+const SDL_Color colors[5] = {BLUE, RED, GREEN, PURPLE, TEAL};
 struct float2 {
   float x, y;
   float2() : x(0), y(0) {}

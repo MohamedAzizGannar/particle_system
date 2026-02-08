@@ -37,7 +37,8 @@ int main() {
   SDL_Event event;
   std::vector<Particle> particles;
   PhysicsSystem physics_system(particles, 0.016f);
-  Emitter emitter(particles, particles.size(), 0.4f);
+  Emitter emitter(particles, float2(250., 250.), 0.01f);
+  Emitter emitter2(particles, float2(150., 150.), 0.001f);
   Uint32 lastTime = SDL_GetTicks();
   while (isRunning) {
     Uint32 currentTime = SDL_GetTicks();
@@ -55,8 +56,8 @@ int main() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     emitter.emitParticles(dt);
+    emitter2.emitParticles(dt);
     physics_system.update(dt);
-    std::cout << "Particle Count : " << particles.size() << std::endl;
     for (const auto &particle : particles) {
       SDL_Color color = particle.getColor();
 

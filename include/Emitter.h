@@ -8,13 +8,17 @@ class Emitter {
 
 private:
   std::vector<Particle> &target_particles;
-  int current_particle_count;
+
+  float2 pos;
+
   const int max_particle_count = 20;
+  int particle_count = target_particles.size();
+
   float spawn_rate;
   float spawn_timer;
 
 public:
-  Emitter(std::vector<Particle> &target_particles, int current_particle_count,
+  Emitter(std::vector<Particle> &target_particles, float2 pos,
           float spawn_rate = 0.5f);
   void emitParticles(float dt);
 };
