@@ -10,9 +10,11 @@ class Particle {
 private:
   float2 pos;
   float2 vel;
+  float radius = 1.f;
+
   SDL_Color color;
 
-  float lifetime = .5f;
+  float lifetime = 2.9f;
   float age = 0.f;
 
 public:
@@ -28,5 +30,6 @@ public:
   const float2 getVel() const;
   const float getAge() const;
   const float getLifetime() const;
+  const float getRadius() const;
 };
 #endif

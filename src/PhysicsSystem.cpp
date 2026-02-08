@@ -1,4 +1,5 @@
 #include "../include/PhysicsSystem.h"
+#include "utils.h"
 #include <algorithm>
 #include <iostream>
 #include <vector>
@@ -9,9 +10,7 @@ std::vector<Particle> *PhysicsSystem::getParticles() { return &particles; }
 void PhysicsSystem::update(float dt) {
   for (auto &particle : particles) {
     particle.setAge(particle.getAge() + dt);
-    std::cout << "Ages : " << particle.getAge() << std::endl;
   }
-  checkLifetime();
   applyGravity(dt);
   applyDrag(dt);
   checkCollisions();
@@ -29,27 +28,28 @@ void PhysicsSystem::applyGravity(float dt) {
 }
 void PhysicsSystem::checkCollisions() {
   for (auto &particle : particles) {
-    if (particle.getPos().x > bounding_box.pos.x + bounding_box.length) {
+    float r = particle.getRadius();
+    if (particle.getPos().x + r > bounding_box.pos.x + bounding_box.length) {
       particle.setVelocity(-particle.getVel().x * DAMPING_COEFFICIENT,
                            particle.getVel().y);
-      particle.setPosition(bounding_box.pos.x + bounding_box.length,
+      particle.setPosition(bounding_box.pos.x + bounding_box.length - r,
                            particle.getPos().y);
     }
-    if (particle.getPos().x < 0) {
+    if (particle.getPos().x - r < bounding_box.pos.x) {
       particle.setVelocity(-particle.getVel().x * DAMPING_COEFFICIENT,
                            particle.getVel().y);
-      particle.setPosition(0, particle.getPos().y);
+      particle.setPosition(bounding_box.pos.x + r, particle.getPos().y);
     }
-    if (particle.getPos().y > bounding_box.pos.y + bounding_box.height) {
+    if (particle.getPos().y + r > bounding_box.pos.y + bounding_box.height) {
       particle.setVelocity(particle.getVel().x,
                            -particle.getVel().y * DAMPING_COEFFICIENT);
       particle.setPosition(particle.getPos().x,
-                           bounding_box.pos.y + bounding_box.height);
+                           bounding_box.pos.y + bounding_box.height - r);
     }
-    if (particle.getPos().y < 0) {
+    if (particle.getPos().y - r < bounding_box.pos.y) {
       particle.setVelocity(particle.getVel().x,
                            -particle.getVel().y * DAMPING_COEFFICIENT);
-      particle.setPosition(particle.getPos().x, 0);
+      particle.setPosition(particle.getPos().x, bounding_box.pos.x + r);
     }
   }
 }
@@ -59,10 +59,4 @@ void PhysicsSystem::applyDrag(float dt) {
                          particle.getVel().y * DRAG);
   }
 }
-void PhysicsSystem::checkLifetime() {
-  particles.erase(std::remove_if(particles.begin(), particles.end(),
-                                 [](const Particle &p) {
-                                   return p.getAge() >= p.getLifetime();
-                                 }),
-                  particles.end());
-}
+BoundingBox PhysicsSystem::getBoundingBox() { return bounding_box; }

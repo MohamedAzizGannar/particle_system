@@ -1,6 +1,9 @@
 #include "Emitter.h"
+#include "FountainEmitter.h"
 #include "Particle.h"
 #include "PhysicsSystem.h"
+#include "Renderer.h"
+#include "utils.h"
 #include <SDL2/SDL.h>
 #include <SDL_events.h>
 #include <SDL_keycode.h>
@@ -19,26 +22,13 @@ int main() {
     std::cerr << "Failure Initializating SDL : " << SDL_GetError() << std::endl;
     return -1;
   }
-  SDL_Window *window = SDL_CreateWindow("Aziz's Particle System", 0, 0, 500,
-                                        500, SDL_WINDOW_SHOWN);
-  if (!window) {
-    std::cerr << "Failure Creating Window : " << SDL_GetError() << std::endl;
-    SDL_Quit();
-    return -1;
-  }
-  SDL_Renderer *renderer =
-      SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-  if (!renderer) {
-    std::cerr << "Failure Creating Renderer : " << SDL_GetError() << std::endl;
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-  }
+  Renderer renderer(800, 800, "Aziz's Particle System");
+
   bool isRunning = true;
   SDL_Event event;
   std::vector<Particle> particles;
   PhysicsSystem physics_system(particles, 0.016f);
-  Emitter emitter(particles, float2(250., 250.), 0.01f);
-  Emitter emitter2(particles, float2(150., 150.), 0.001f);
+  std::vector<Emitter> emitter_arr;
   Uint32 lastTime = SDL_GetTicks();
   while (isRunning) {
     Uint32 currentTime = SDL_GetTicks();
@@ -52,23 +42,27 @@ int main() {
       if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
         isRunning = false;
       }
+      if (event.type == SDL_MOUSEBUTTONDOWN) {
+        emitter_arr.emplace_back(particles,
+                                 float2(event.motion.x, event.motion.y), 0.01);
+      }
     }
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-    emitter.emitParticles(dt);
-    emitter2.emitParticles(dt);
+    renderer.clear({0, 0, 0, 0});
+    BoundingBox bounding_box = physics_system.getBoundingBox();
+    for (auto &e : emitter_arr)
+      e.emitParticles(dt);
+    renderer.drawRectangle(bounding_box.pos,
+                           float2(bounding_box.length, bounding_box.height),
+                           {255, 0, 0, 255});
     physics_system.update(dt);
     for (const auto &particle : particles) {
       SDL_Color color = particle.getColor();
 
-      SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-      SDL_RenderDrawPoint(renderer, particle.getPos().x, particle.getPos().y);
+      renderer.drawCircle(particle.getPos(), particle.getRadius(), color);
     }
-    SDL_RenderPresent(renderer);
+    renderer.present();
     SDL_Delay(16);
   }
-  SDL_DestroyWindow(window);
-  SDL_DestroyRenderer(renderer);
   SDL_Quit();
   std::cout << "Hello World, I'm a Particle System\n";
   return 0;

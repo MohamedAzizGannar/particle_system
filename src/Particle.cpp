@@ -18,3 +18,4 @@ const float2 Particle::getVel() const { return vel; }
 const SDL_Color Particle::getColor() const { return color; }
 const float Particle::getAge() const { return age; }
 const float Particle::getLifetime() const { return lifetime; }
+const float Particle::getRadius() const { return radius; }
