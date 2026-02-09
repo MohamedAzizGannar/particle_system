@@ -2,20 +2,18 @@
 #define FOUNTAIN_H
 
 #include "Emitter.h"
+#include "Utility.h"
 #include <vector>
-class FoutainEmitter : public Emitter {
-
+class FountainEmitter : public Emitter {
 private:
-  float min_angle;
-  float max_angle;
+  float spread_angle;
 
 public:
-  FoutainEmitter(std::vector<Particle> &target_particles, float2 pos,
-                 float spawn_rate, float min_angle = M_PI / 3.f,
-                 float max_angle = 2. * M_PI / 3.);
+  FountainEmitter(float2 pos, float spawn_interval, float spread_angle,
+                  std::vector<Particle> &particles);
 
 protected:
-  void generateVelocity(float &vx, float &vy, float speed) override;
+  void generateVelocity(float2 &velocity_vector, float speed) override;
 };
 
-#endif
+#endif // !FOUTAIN_H

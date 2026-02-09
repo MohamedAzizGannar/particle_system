@@ -1,6 +1,6 @@
 #ifndef RENDERER_h
 #define RENDERER_h
-#include "utils.h"
+#include "Utility.h"
 #include <SDL2/SDL.h>
 #include <SDL_pixels.h>
 #include <SDL_render.h>

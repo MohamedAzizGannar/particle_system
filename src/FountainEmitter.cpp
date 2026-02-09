@@ -1,16 +1,16 @@
 #include "FountainEmitter.h"
-#include <algorithm>
 #include <cmath>
 
-FoutainEmitter::FoutainEmitter(std::vector<Particle> &target_particles,
-                               float2 pos, float spawn_rate, float min_angle,
-                               float max_angle)
-    : Emitter(target_particles, pos, spawn_rate), min_angle(min_angle),
-      max_angle(max_angle) {}
+FountainEmitter::FountainEmitter(float2 pos, float spawn_interval,
+                                 float spread_angle,
+                                 std::vector<Particle> &particles)
+    : Emitter(pos, spawn_interval, particles), spread_angle(spread_angle) {}
 
-void FoutainEmitter::generateVelocity(float &vx, float &vy, float speed) {
+void FountainEmitter::generateVelocity(float2 &velocity_vector, float speed) {
+  float min_angle = M_PI / 2.f - spread_angle / 2.f;
+  float max_angle = M_PI / 2.f + spread_angle / 2.f;
   float angle =
       min_angle + ((float)rand() / RAND_MAX) * (max_angle - min_angle);
-  vx = cos(angle) * speed;
-  vy = -sin(angle) * speed;
+  velocity_vector.x = cos(angle) * speed;
+  velocity_vector.y = -sin(angle) * speed;
 }
