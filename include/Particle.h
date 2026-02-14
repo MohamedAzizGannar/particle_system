@@ -14,11 +14,11 @@ class Particle {
 private:
   float2 pos;
   float2 vel;
-  float radius = 2.f;
+  float radius = 3.f;
 
   SDL_Color color;
 
-  float lifetime = 2.9f;
+  float lifetime = 3.9f;
   float age = 0.f;
 
 public:

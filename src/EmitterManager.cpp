@@ -1,10 +1,13 @@
 #include "EmitterManager.h"
+#include "Attractor.h"
 #include "Emitter.h"
 #include "FountainEmitter.h"
 #include "Gravity.h"
 #include "Renderer.h"
+#include "Repulsor.h"
 #include "Wind.h"
 #include <algorithm>
+#include <iostream>
 #include <memory>
 
 EmitterManager::EmitterManager() {
@@ -18,6 +21,7 @@ void EmitterManager::update(float dt) {
                                    return p.getAge() >= p.getLifetime();
                                  }),
                   particles.end());
+  std::cout << "Particle Count : " << particles.size() << std::endl;
   for (auto &emitter : emitters) {
     emitter->emitParticles(dt);
   }
@@ -30,6 +34,9 @@ void EmitterManager::render(Renderer &renderer) {
   for (auto &particle : particles) {
     particle.render(renderer);
   }
+  if (renderForces)
+    for (auto &force : forces)
+      force->render(renderer);
 }
 void EmitterManager::addEmitter(float2 pos, float spawn_interval) {
   emitters.push_back(std::make_unique<Emitter>(pos, spawn_interval, particles));
@@ -49,3 +56,21 @@ void EmitterManager::switchWind() {
   forces[1]->setActive(isWindActive);
 }
 void EmitterManager::clearEmitters() { emitters.clear(); }
+void EmitterManager::addPositionalForce(float strength, float2 pos,
+                                        float radius, bool isAttractor) {
+
+  if (isAttractor)
+    forces.push_back(std::make_unique<Attractor>(strength, pos, radius));
+  else
+    forces.push_back(std::make_unique<Repulsor>(strength, pos, radius));
+}
+void EmitterManager::clearForces() {
+  forces.clear();
+
+  forces.push_back(std::make_unique<Gravity>(GRAVITY_COEFFICIENT));
+  forces[0]->setActive(isGravityActive);
+  forces.push_back(std::make_unique<Wind>(WIND_COEFFICIENT, M_PI));
+  forces[1]->setActive(isWindActive);
+}
+
+void EmitterManager::switchForceRendering() { renderForces = !renderForces; }

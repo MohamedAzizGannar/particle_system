@@ -32,6 +32,15 @@ struct float2 {
   }
   float length() const { return sqrtf(x * x + y * y); }
   float sqrd_length() const { return x * x + y * y; }
+  void normalize() {
+    float distance = length();
+    if (distance == 0.f) {
+      x = 0.f;
+      y = 0.f;
+    }
+    x /= distance;
+    y /= distance;
+  }
 };
 
 struct BoundingBox {

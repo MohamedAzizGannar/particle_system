@@ -7,7 +7,7 @@ class Gravity : public Force {
 
 public:
   Gravity(float strength) : Force(strength) {}
-  void applyForce(Particle &p, float dt);
+  void applyForce(Particle &p, float dt) override;
 };
 
 #endif // !GRAVITY_H

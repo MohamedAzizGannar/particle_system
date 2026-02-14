@@ -11,6 +11,7 @@ class EmitterManager {
 private:
   bool isGravityActive = true;
   bool isWindActive = true;
+  bool renderForces = true;
   std::vector<Particle> particles;
   std::vector<std::unique_ptr<Emitter>> emitters;
   std::vector<std::unique_ptr<Force>> forces;
@@ -26,6 +27,11 @@ public:
 
   void switchGravity();
   void switchWind();
+
+  void addPositionalForce(float strength, float2 pos, float radius,
+                          bool isAttractor);
+  void clearForces();
+  void switchForceRendering();
 };
 
 #endif // !EMITTERMANAGER_H

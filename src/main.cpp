@@ -45,7 +45,7 @@ int main() {
     int mousey;
     SDL_GetMouseState(&mousex, &mousey);
     if (inputManager.isKeyPressed(SDL_SCANCODE_1)) {
-      emitterManager.addEmitter(float2(mousex, mousey), 0.01f);
+      emitterManager.addEmitter(float2(mousex, mousey), 0.001f);
     }
     if (inputManager.isKeyPressed(SDL_SCANCODE_2)) {
       emitterManager.addFountainEmitter(float2(mousex, mousey), 0.01f,
@@ -56,6 +56,20 @@ int main() {
     }
     if (inputManager.isKeyPressed(SDL_SCANCODE_W)) {
       emitterManager.switchWind();
+    }
+    if (inputManager.isKeyPressed(SDL_SCANCODE_F)) {
+      emitterManager.switchForceRendering();
+    }
+    if (inputManager.isKeyPressed(SDL_SCANCODE_A)) {
+      emitterManager.addPositionalForce(2300.f, float2(mousex, mousey), 150.f,
+                                        true);
+    }
+    if (inputManager.isKeyPressed(SDL_SCANCODE_R)) {
+      emitterManager.addPositionalForce(1300.f, float2(mousex, mousey), 150.f,
+                                        false);
+    }
+    if (inputManager.isKeyPressed(SDL_SCANCODE_V)) {
+      emitterManager.clearForces();
     }
     if (inputManager.isKeyPressed(SDL_SCANCODE_C)) {
       emitterManager.clearEmitters();
