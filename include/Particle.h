@@ -1,7 +1,6 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 #include "Force.h"
-#include "Renderer.h"
 #include "Utility.h"
 #include <SDL2/SDL.h>
 #include <SDL_pixels.h>
@@ -14,13 +13,15 @@ class Particle {
 private:
   float2 pos;
   float2 vel;
+  SDL_Color start_color = GREEN;
+  SDL_Color end_color = RED;
 
   SDL_Color color;
 
-  float lifetime = 3.9f;
+  float lifetime = 1.f;
   float age = 0.f;
 
-  float radius = 3.f;
+  float radius = 2.f;
 
   float mass = 1.f;
 
@@ -28,7 +29,7 @@ private:
 
 public:
   Particle(float x, float y, float vx, float vy,
-           SDL_Color color = {255, 255, 255, 255});
+           SDL_Color color = {255, 255, 255, 255}, float lifetime = 2.f);
 
   void setPosition(float x_, float y_);
   void setVelocity(float x_, float y_);
@@ -43,7 +44,6 @@ public:
   const float getMass() const;
   const float getVolume() const;
 
-  void render(Renderer &renderer);
   void update(float dt, const std::vector<std::unique_ptr<Force>> &forces);
 
   const bool isDead() const;

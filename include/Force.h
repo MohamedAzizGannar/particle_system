@@ -16,6 +16,8 @@ public:
 
   bool isActive() { return active; }
   void setActive(bool a) { active = a; }
+
+  void setStrength(float new_strength);
 };
 
 #endif // !FORCE_H

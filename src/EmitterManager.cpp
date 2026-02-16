@@ -7,7 +7,6 @@
 #include "Repulsor.h"
 #include "Wind.h"
 #include <algorithm>
-#include <iostream>
 #include <memory>
 
 EmitterManager::EmitterManager() {
@@ -21,7 +20,6 @@ void EmitterManager::update(float dt) {
                                    return p.getAge() >= p.getLifetime();
                                  }),
                   particles.end());
-  std::cout << "Particle Count : " << particles.size() << std::endl;
   for (auto &emitter : emitters) {
     emitter->emitParticles(dt);
   }
@@ -31,9 +29,8 @@ void EmitterManager::update(float dt) {
   }
 }
 void EmitterManager::render(Renderer &renderer) {
-  for (auto &particle : particles) {
-    particle.render(renderer);
-  }
+
+  renderer.drawParticlesBatched(particles);
   if (renderForces)
     for (auto &force : forces)
       force->render(renderer);
@@ -47,11 +44,11 @@ void EmitterManager::addFountainEmitter(float2 pos, float spawn_interval,
   emitters.push_back(std::make_unique<FountainEmitter>(
       pos, spawn_interval, spread_angle, particles));
 }
-void EmitterManager::switchGravity() {
+void EmitterManager::toggleGravity() {
   isGravityActive = !isGravityActive;
   forces[0]->setActive(isGravityActive);
 }
-void EmitterManager::switchWind() {
+void EmitterManager::toggleWind() {
   isWindActive = !isWindActive;
   forces[1]->setActive(isWindActive);
 }
@@ -65,12 +62,18 @@ void EmitterManager::addPositionalForce(float strength, float2 pos,
     forces.push_back(std::make_unique<Repulsor>(strength, pos, radius));
 }
 void EmitterManager::clearForces() {
-  forces.clear();
 
-  forces.push_back(std::make_unique<Gravity>(GRAVITY_COEFFICIENT));
-  forces[0]->setActive(isGravityActive);
-  forces.push_back(std::make_unique<Wind>(WIND_COEFFICIENT, M_PI));
-  forces[1]->setActive(isWindActive);
+  forces.erase(forces.begin() + 2, forces.end());
 }
 
-void EmitterManager::switchForceRendering() { renderForces = !renderForces; }
+void EmitterManager::toggleForceRendering() { renderForces = !renderForces; }
+void EmitterManager::updateGravity(float new_strength) {
+  forces[0]->setStrength(new_strength);
+}
+void EmitterManager::updateWind(float new_strength) {
+  forces[1]->setStrength(new_strength);
+}
+void EmitterManager::updateLifetime(float lifetime) {
+  for (auto &emitter : emitters)
+    emitter->setLifetime(lifetime);
+}

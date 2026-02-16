@@ -11,7 +11,8 @@ void Emitter::emitParticles(float dt) {
   if (spawn_timer >= spawn_interval) {
     float2 v;
     generateVelocity(v, 100.f);
-    particles.emplace_back(pos.x, pos.y, v.x, v.y, RED);
+    particles.emplace_back(pos.x, pos.y, v.x, v.y,
+                           SDL_Color{255, 255, 255, 255}, lifetime);
     spawn_timer = 0.f;
   }
 }

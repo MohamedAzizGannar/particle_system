@@ -18,6 +18,8 @@ private:
 
 public:
   EmitterManager();
+
+  int getParticleCount() { return particles.size(); }
   void update(float dt);
   void render(Renderer &renderer);
 
@@ -25,13 +27,17 @@ public:
   void addFountainEmitter(float2 pos, float spawn_interval, float spread_angle);
   void clearEmitters();
 
-  void switchGravity();
-  void switchWind();
+  void toggleGravity();
+  void toggleWind();
+  void toggleForceRendering();
 
   void addPositionalForce(float strength, float2 pos, float radius,
                           bool isAttractor);
+  void updateGravity(float new_strength);
+  void updateWind(float new_strength);
+  void updateLifetime(float lifetime_);
+
   void clearForces();
-  void switchForceRendering();
 };
 
 #endif // !EMITTERMANAGER_H

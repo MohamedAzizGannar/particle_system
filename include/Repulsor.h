@@ -1,8 +1,8 @@
 #ifndef REPULSOR_H
 #define REPULSOR_H
 #include "Particle.h"
+#include "Renderer.h"
 class Repulsor : public Force {
-
 private:
   float radius;
   float2 pos;

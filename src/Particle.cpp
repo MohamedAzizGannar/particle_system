@@ -1,11 +1,11 @@
 #include "Particle.h"
 #include "Force.h"
-#include "Renderer.h"
 #include <SDL_render.h>
 #include <memory>
 
-Particle::Particle(float x, float y, float vx, float vy, SDL_Color color)
-    : pos(x, y), vel(vx, vy), color(color) {}
+Particle::Particle(float x, float y, float vx, float vy, SDL_Color color,
+                   float lifetime)
+    : pos(x, y), vel(vx, vy), color(color), lifetime(lifetime) {}
 
 void Particle::setPosition(float x_, float y_) {
   pos.x = x_;
@@ -31,13 +31,15 @@ const bool Particle::isDead() const { return age >= lifetime; }
 
 void Particle::update(float dt,
                       const std::vector<std::unique_ptr<Force>> &forces) {
+  float t = age / lifetime;
+  color.r = start_color.r - t * (start_color.r - end_color.r);
+  color.g = start_color.g - t * (start_color.g - end_color.g);
+  color.b = start_color.b - t * (start_color.b - end_color.b);
+  color.a = (Uint8)(255 * (1.0f - t));
   for (const auto &force : forces) {
     if (force->isActive())
       force->applyForce(*this, dt);
   }
   float2 newVel = this->getPos() + this->getVel() * dt;
   this->setPosition(newVel.x, newVel.y);
-}
-void Particle::render(Renderer &renderer) {
-  renderer.drawCircle(pos, radius, color);
 }

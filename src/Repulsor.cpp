@@ -4,13 +4,17 @@
 Repulsor::Repulsor(float strength, float2 pos, float radius)
     : Force(strength), pos(pos), radius(radius) {}
 void Repulsor::applyForce(Particle &p, float dt) {
-
   float distance_x = p.getPos().x - pos.x;
+  if (distance_x > radius)
+    return;
   float distance_y = p.getPos().y - pos.y;
+  if (distance_y > radius)
+    return;
 
   float2 distance_vector(distance_x, distance_y);
   float distance_sqrd = distance_vector.sqrd_length();
-  if (distance_vector.length() > radius)
+  float distance = distance_vector.length();
+  if (distance > radius || distance < 10.f)
     return;
   distance_vector.normalize();
 
