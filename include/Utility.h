@@ -19,6 +19,9 @@ struct float2 {
   float2 operator-(const float2 &other) const {
     return float2(other.x - x, other.y - y);
   }
+  float2 operator*(const float scalar) const {
+    return float2(x * scalar, y * scalar);
+  }
   float2 &operator+=(const float2 &other) {
     x += other.x;
     y += other.y;
@@ -28,6 +31,26 @@ struct float2 {
   float2 &operator-=(const float2 &other) {
     x -= other.x;
     y -= other.y;
+    return *this;
+  }
+  float2 &operator+=(const float scalar) {
+    x += scalar;
+    y += scalar;
+    return *this;
+  }
+  float2 &operator-=(const float scalar) {
+    x -= scalar;
+    y -= scalar;
+    return *this;
+  }
+  float2 &operator*=(const float scalar) {
+    x *= scalar;
+    y *= scalar;
+    return *this;
+  }
+  float2 &operator/=(const float scalar) {
+    x /= scalar;
+    y /= scalar;
     return *this;
   }
   float length() const { return sqrtf(x * x + y * y); }

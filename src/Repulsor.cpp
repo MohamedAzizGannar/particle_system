@@ -14,8 +14,7 @@ void Repulsor::applyForce(Particle &p, float dt) {
     return;
   distance_vector.normalize();
 
-  distance_vector.x *= strength * 200 / distance_sqrd;
-  distance_vector.y *= strength * 200 / distance_sqrd;
+  distance_vector *= strength * 6.67e2 * p.getMass() / distance_sqrd;
 
   p.setVelocity(p.getVel().x + distance_vector.x * dt,
                 p.getVel().y + distance_vector.y * dt);

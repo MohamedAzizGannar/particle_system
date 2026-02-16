@@ -1,6 +1,7 @@
 #include "EmitterManager.h"
 #include "InputManager.h"
 #include "Renderer.h"
+#include "imgui/imgui.h"
 #include <SDL2/SDL.h>
 #include <SDL_events.h>
 #include <SDL_keycode.h>
@@ -24,6 +25,20 @@ int main() {
   SDL_Event event;
   Uint32 lastTime = SDL_GetTicks();
   Renderer renderer(800, 800, "hello");
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+  (void)io;
+  io.ConfigFlags |=
+      ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+  io.ConfigFlags |=
+      ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+
+  // Setup Dear ImGui style
+  ImGui::StyleColorsDark();
+  // ImGui::StyleColorsLight();
+
+  // Setup scaling
+  ImGuiStyle &style = ImGui::GetStyle();
   InputManager inputManager;
   EmitterManager emitterManager;
   while (isRunning) {
@@ -61,7 +76,7 @@ int main() {
       emitterManager.switchForceRendering();
     }
     if (inputManager.isKeyPressed(SDL_SCANCODE_A)) {
-      emitterManager.addPositionalForce(2300.f, float2(mousex, mousey), 150.f,
+      emitterManager.addPositionalForce(1300.f, float2(mousex, mousey), 150.f,
                                         true);
     }
     if (inputManager.isKeyPressed(SDL_SCANCODE_R)) {

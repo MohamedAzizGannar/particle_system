@@ -14,12 +14,17 @@ class Particle {
 private:
   float2 pos;
   float2 vel;
-  float radius = 3.f;
 
   SDL_Color color;
 
   float lifetime = 3.9f;
   float age = 0.f;
+
+  float radius = 3.f;
+
+  float mass = 1.f;
+
+  float volume = 4.f / 3.f * M_PI * radius * radius * radius;
 
 public:
   Particle(float x, float y, float vx, float vy,
@@ -35,6 +40,8 @@ public:
   const float getAge() const;
   const float getLifetime() const;
   const float getRadius() const;
+  const float getMass() const;
+  const float getVolume() const;
 
   void render(Renderer &renderer);
   void update(float dt, const std::vector<std::unique_ptr<Force>> &forces);

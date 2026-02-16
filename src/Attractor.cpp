@@ -8,14 +8,10 @@ void Attractor::applyForce(Particle &p, float dt) {
 
   float2 distance_vector(distance_x, distance_y);
   float distance_sqrd = distance_vector.sqrd_length();
-  if (distance_vector.length() > radius)
-    return;
-  if (distance_vector.sqrd_length() < 2.f)
+  if (distance_vector.length() > radius || distance_vector.length() < 4.f)
     return;
   distance_vector.normalize();
-
-  distance_vector.x *= strength * 200.f / distance_sqrd;
-  distance_vector.y *= strength * 200.f / distance_sqrd;
+  distance_vector *= strength * 6.67e2 * p.getMass() / distance_sqrd;
 
   p.setVelocity(p.getVel().x - distance_vector.x * dt,
                 p.getVel().y - distance_vector.y * dt);
