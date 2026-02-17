@@ -9,6 +9,14 @@ const SDL_Color GREEN = {0, 255, 0, 255};
 const SDL_Color TEAL = {0, 125, 125, 255};
 const SDL_Color PURPLE = {125, 0, 125, 255};
 const SDL_Color colors[5] = {BLUE, RED, GREEN, PURPLE, TEAL};
+inline float fast_inv_sqrt(float x) {
+  float half = 0.5f * x;
+  int i = *(int *)&x;            // Interpret float bits as int
+  i = 0x5f3759df - (i >> 1);     // Magic constant approximation
+  float y = *(float *)&i;        // Back to float
+  y = y * (1.5f - half * y * y); // One Newton-Raphson iteration
+  return y;
+}
 struct float2 {
   float x, y;
   float2() : x(0), y(0) {}
@@ -60,12 +68,23 @@ struct float2 {
     if (distance == 0.f) {
       x = 0.f;
       y = 0.f;
+      return;
     }
     x /= distance;
     y /= distance;
   }
+  void fast_normalize() {
+    float sq = sqrd_length();
+    if (sq == 0.f) {
+      x = 0.f;
+      y = 0.f;
+      return;
+    }
+    float inv = fast_inv_sqrt(sq);
+    x *= inv;
+    y *= inv;
+  }
 };
-
 struct BoundingBox {
   float2 pos;
   float length;

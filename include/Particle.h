@@ -24,6 +24,7 @@ private:
   float radius = 2.f;
 
   float mass = 1.f;
+  float max_speed = 1000.f;
 
   float volume = 4.f / 3.f * M_PI * radius * radius * radius;
 
