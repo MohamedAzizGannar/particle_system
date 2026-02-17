@@ -13,7 +13,8 @@ protected:
   std::vector<Particle> &particles;
 
 public:
-  Emitter(float2 pos, float spawn_interval, std::vector<Particle> &particles);
+  Emitter(float2 pos, float spawn_interval, std::vector<Particle> &particles,
+          float lifetime);
 
   void setLifetime(float lifetime_) { lifetime = lifetime_; }
   virtual void emitParticles(float dt);

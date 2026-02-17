@@ -1,4 +1,5 @@
 #include "EmitterManager.h"
+#include "AirResistance.h"
 #include "Attractor.h"
 #include "Emitter.h"
 #include "FountainEmitter.h"
@@ -12,6 +13,7 @@
 EmitterManager::EmitterManager() {
   forces.push_back(std::make_unique<Gravity>(GRAVITY_COEFFICIENT));
   forces.push_back(std::make_unique<Wind>(WIND_COEFFICIENT, M_PI));
+  forces.push_back(std::make_unique<AirResistance>(0.1));
 };
 void EmitterManager::update(float dt) {
 
@@ -36,13 +38,14 @@ void EmitterManager::render(Renderer &renderer) {
       force->render(renderer);
 }
 void EmitterManager::addEmitter(float2 pos, float spawn_interval) {
-  emitters.push_back(std::make_unique<Emitter>(pos, spawn_interval, particles));
+  emitters.push_back(
+      std::make_unique<Emitter>(pos, spawn_interval, particles, lifetime));
 }
 void EmitterManager::addFountainEmitter(float2 pos, float spawn_interval,
-                                        float spread_angle) {
+                                        float spread_angle, bool isUp) {
 
   emitters.push_back(std::make_unique<FountainEmitter>(
-      pos, spawn_interval, spread_angle, particles));
+      pos, spawn_interval, spread_angle, particles, lifetime, isUp));
 }
 void EmitterManager::toggleGravity() {
   isGravityActive = !isGravityActive;
@@ -63,7 +66,7 @@ void EmitterManager::addPositionalForce(float strength, float2 pos,
 }
 void EmitterManager::clearForces() {
 
-  forces.erase(forces.begin() + 2, forces.end());
+  forces.erase(forces.begin() + 3, forces.end());
 }
 
 void EmitterManager::toggleForceRendering() { renderForces = !renderForces; }
@@ -73,7 +76,8 @@ void EmitterManager::updateGravity(float new_strength) {
 void EmitterManager::updateWind(float new_strength) {
   forces[1]->setStrength(new_strength);
 }
-void EmitterManager::updateLifetime(float lifetime) {
+void EmitterManager::updateLifetime(float lifetime_) {
+  lifetime = lifetime_;
   for (auto &emitter : emitters)
-    emitter->setLifetime(lifetime);
+    emitter->setLifetime(lifetime_);
 }

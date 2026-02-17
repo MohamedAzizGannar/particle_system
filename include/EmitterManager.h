@@ -12,6 +12,7 @@ private:
   bool isGravityActive = true;
   bool isWindActive = true;
   bool renderForces = true;
+  float lifetime = 2.f;
   std::vector<Particle> particles;
   std::vector<std::unique_ptr<Emitter>> emitters;
   std::vector<std::unique_ptr<Force>> forces;
@@ -24,7 +25,8 @@ public:
   void render(Renderer &renderer);
 
   void addEmitter(float2 pos, float spawn_interval);
-  void addFountainEmitter(float2 pos, float spawn_interval, float spread_angle);
+  void addFountainEmitter(float2 pos, float spawn_interval, float spread_angle,
+                          bool isUp = true);
   void clearEmitters();
 
   void toggleGravity();

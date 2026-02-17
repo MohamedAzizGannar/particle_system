@@ -7,10 +7,12 @@
 class FountainEmitter : public Emitter {
 private:
   float spread_angle;
+  bool up;
 
 public:
   FountainEmitter(float2 pos, float spawn_interval, float spread_angle,
-                  std::vector<Particle> &particles);
+                  std::vector<Particle> &particles, float lifetime,
+                  bool up = true);
 
 protected:
   void generateVelocity(float2 &velocity_vector, float speed) override;

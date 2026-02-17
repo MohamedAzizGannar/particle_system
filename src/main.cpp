@@ -79,6 +79,10 @@ int main() {
       emitterManager.addFountainEmitter(float2(mousex, mousey), spawn_interval,
                                         fountain_spread);
     }
+    if (inputManager.isKeyPressed(SDL_SCANCODE_3)) {
+      emitterManager.addFountainEmitter(float2(mousex, mousey), spawn_interval,
+                                        fountain_spread, false);
+    }
     if (inputManager.isKeyPressed(SDL_SCANCODE_G)) {
       emitterManager.toggleGravity();
     }
@@ -113,13 +117,13 @@ int main() {
     ImGui::Text("Particle Count:%d", emitterManager.getParticleCount());
     ImGui::Separator();
     ImGui::Text("Attractor Properties");
-    ImGui::SliderFloat("Attractor Strength", &attractor_strength, 0.f, 3000.f);
-    ImGui::SliderFloat("Attractor Radius ", &attractor_radius, 0.f, 300.f);
+    ImGui::SliderFloat("Attractor Strength", &attractor_strength, 0.f, 6000.f);
+    ImGui::SliderFloat("Attractor Radius ", &attractor_radius, 0.f, 400.f);
 
     ImGui::Spacing();
     ImGui::Text("Attractor Properties");
-    ImGui::SliderFloat("Repulsor Strength", &repulsor_strength, 0.f, 3000.f);
-    ImGui::SliderFloat("Repulsor Radius ", &repulsor_radius, 0.f, 300.f);
+    ImGui::SliderFloat("Repulsor Strength", &repulsor_strength, 0.f, 6000.f);
+    ImGui::SliderFloat("Repulsor Radius ", &repulsor_radius, 0.f, 400.f);
 
     ImGui::Spacing();
     if (ImGui::Button("Toggle Gravity")) {

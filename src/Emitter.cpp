@@ -3,8 +3,9 @@
 #include <cstdlib>
 
 Emitter::Emitter(float2 pos, float spawn_interval,
-                 std::vector<Particle> &particles)
-    : pos(pos), spawn_interval(spawn_interval), particles(particles) {}
+                 std::vector<Particle> &particles, float lifetime)
+    : pos(pos), spawn_interval(spawn_interval), particles(particles),
+      lifetime(lifetime) {}
 
 void Emitter::emitParticles(float dt) {
   spawn_timer += dt;
